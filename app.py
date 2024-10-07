@@ -8,7 +8,7 @@ model = None  # 全局变量，用于存储模型
 def load_model():
     global model
     # 在此处加载您的模型
-    model = load('final_model.joblib')
+    model = load('Prediction-Model-for-Hypoxemia-During-Painless-Gastroscopy-and-Colonoscopy/final_model.joblib')
 
 @app.route('/', methods=['GET'])
 def home():
