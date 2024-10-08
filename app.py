@@ -3,6 +3,7 @@ from joblib import load
 import numpy as np
 import os
 app = Flask(__name__)
+model = None
 # 全局加载模型
 current_dir = os.path.dirname(os.path.abspath(__file__))
 model_path = os.path.join(current_dir, 'final_model.joblib')
