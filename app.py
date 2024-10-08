@@ -2,20 +2,38 @@ from flask import Flask, render_template, request, jsonify
 from joblib import load
 import numpy as np
 import os
+import logging
+import traceback
 
 app = Flask(__name__)
 model = None
 
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 def load_model():
     global model
     try:
-        # 定义模型路径，请将 'model.joblib' 替换为您的实际模型文件名
-        model_path = os.path.join(os.path.dirname(__file__), 'final_model.joblib')
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        model_path = os.path.join(base_dir, 'final_model.joblib')
+        logger.info(f"模型路径：{model_path}")
+        
+        # 检查模型文件是否存在
+        if not os.path.exists(model_path):
+            logger.error("模型文件不存在！")
+            model = None
+            return
+        
+        # 打印模型文件大小
+        file_size = os.path.getsize(model_path)
+        logger.info(f"模型文件大小：{file_size} bytes")
+        
         # 加载模型
         model = load(model_path)
-        print("模型已成功加载")
+        logger.info("模型已成功加载")
     except Exception as e:
-        print(f"模型加载失败: {e}")
+        logger.error("模型加载失败")
+        logger.error(traceback.format_exc())
         model = None
 
 @app.route('/', methods=['GET'])
@@ -111,6 +129,8 @@ def predict():
         prediction = model.predict(features)
         return jsonify({'prediction': prediction.tolist()})
     except Exception as e:
+        logger.error("预测过程中发生错误")
+        logger.error(traceback.format_exc())
         # 返回服务器内部错误信息
         return jsonify({'error': str(e)}), 500
 
