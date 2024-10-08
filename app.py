@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, jsonify
 from joblib import load
 import numpy as np
-
+import os
 app = Flask(__name__)
 # 全局加载模型
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -10,7 +10,7 @@ model_path = os.path.join(current_dir, 'final_model.joblib')
 def load_model():
     global model
     # 在此处加载您的模型
-    model = joblib.load(model_path)
+    model = load(model_path)
 
 @app.route('/', methods=['GET'])
 def home():
