@@ -3,12 +3,14 @@ from joblib import load
 import numpy as np
 
 app = Flask(__name__)
-model = None  # 全局变量，用于存储模型
+# 全局加载模型
+current_dir = os.path.dirname(os.path.abspath(__file__))
+model_path = os.path.join(current_dir, 'final_model.joblib')
 
 def load_model():
     global model
     # 在此处加载您的模型
-    model = load('Prediction-Model-for-Hypoxemia-During-Painless-Gastroscopy-and-Colonoscopy/final_model.joblib')
+    model = joblib.load(model_path)
 
 @app.route('/', methods=['GET'])
 def home():
