@@ -10,7 +10,7 @@ def load_model():
     global model
     try:
         # 定义模型路径，请将 'model.joblib' 替换为您的实际模型文件名
-        model_path = os.path.join(os.path.dirname(__file__), 'model.joblib')
+        model_path = os.path.join(os.path.dirname(__file__), 'final_model.joblib')
         # 加载模型
         model = load(model_path)
         print("模型已成功加载")
