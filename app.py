@@ -59,7 +59,7 @@ def load_model():
         if not os.path.exists(model_path):
             logger.warning("Model file does not exist. Attempting alternative methods to load the model...")
             # Attempt to download the model file from a remote URL
-            model_url = 'https://your-model-url.com/final_model.joblib'  # Replace with your actual model file URL
+            model_url = 'https://github.com/wanjiyang/Prediction-Model-for-Hypoxemia-During-Painless-Gastroscopy-and-Colonoscopy/blob/main/final_model.joblib'  # Replace with your actual model file URL
             if download_model(model_url, model_path):
                 logger.info("Model file downloaded from the remote URL.")
             else:
