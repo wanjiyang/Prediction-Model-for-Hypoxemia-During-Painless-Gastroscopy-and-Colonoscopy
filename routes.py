@@ -3,11 +3,11 @@ from joblib import load
 import numpy as np
 
 app = Flask(__name__)
-model = None  # 全局变量，用于存储模型
+model = None  # Global variable to store the model
 
 def load_model():
     global model
-    # 在此处加载您的模型
+    # Load your model here
     model = load('final_model.joblib')
 
 @app.route('/', methods=['GET'])
@@ -17,74 +17,72 @@ def home():
 @app.route('/predict', methods=['POST'])
 def predict():
     try:
-        # 从请求中获取JSON数据
         data = request.get_json()
 
-        # 提取所有输入字段，并进行类型转换
+        # Extract and type convert all input fields
         propofol_dosage = float(data['Propofol Dosage'])
         oxygen_flow_rate = float(data['Oxygen Flow Rate'])
         gender = int(data['Gender'])
         age = int(data['Age'])
         bmi = int(data['BMI'])
-        nc = int(data['NC'])
+        neck_circumference = int(data['NC'])
         stop_bang = int(data['STOP-BANG'])
         asa = int(data['ASA'])
         spo2 = int(data['SPO2'])
         systolic_bp = int(data['Systolic Blood Pressure'])
         diastolic_bp = int(data['Diastolic Blood Pressure'])
-        hr = int(data['HR'])
-        rr = int(data['RR'])
+        heart_rate = int(data['HR'])
+        respiratory_rate = int(data['RR'])
         surgery_type_3 = int(data['Surgery Type-3'])
         surgery_type_4 = int(data['Surgery Type-4'])
+        surgery_type_2 = int(data['Surgery Type-2'])  # Added this new field
         smoking = int(data['Smoking'])
         drinking = int(data['Drinking'])
-        bp = int(data['BP'])
         snoring = int(data['Snoring'])
         tired = int(data['Tired'])
-        observed = int(data['Observed'])
-        inpatient = int(data['Inpatient'])
-        # 新增字段
+        observed_apnea = int(data['Observed'])
+        inpatient_status = int(data['Inpatient'])
         height = float(data['Height'])
         years_experience = int(data['Years of Surgical Experience'])
-        cardiovascular_disease = int(data['Cardiovascular Disease-1'])
-        other_disease = int(data['Other Disease-1.0'])
+        cardiovascular_disease = int(data['Cardiovascular Disease'])
+        other_disease = int(data['Other Diseases'])
 
-        # 按照模型期望的特征顺序，将所有特征组合成一个数组
+        # Combine all features into an array in the order expected by the model
         features = np.array([[
             propofol_dosage,
-            height,
-            years_experience,
-            stop_bang,
+            oxygen_flow_rate,
+            gender,
+            age,
             bmi,
-            nc,
-            diastolic_bp,
+            neck_circumference,
+            stop_bang,
+            asa,
             spo2,
             systolic_bp,
-            age,
-            rr,
-            hr,
-            asa,
-            snoring,
+            diastolic_bp,
+            heart_rate,
+            respiratory_rate,
+            surgery_type_2,
             surgery_type_3,
-            drinking,
-            bp,
+            surgery_type_4,
             smoking,
-            inpatient,
-            observed,
-            gender,
-            cardiovascular_disease,
+            drinking,
+            snoring,
             tired,
-            other_disease,
-            oxygen_flow_rate,
-            surgery_type_4
+            observed_apnea,
+            inpatient_status,
+            height,
+            years_experience,
+            cardiovascular_disease,
+            other_disease
         ]])
 
-        # 使用模型进行预测
+        # Use the model to make a prediction
         prediction = model.predict(features)
         return jsonify({'prediction': prediction.tolist()})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    load_model()  # 在应用启动时加载模型
+    load_model()  # Load the model when the application starts
     app.run(debug=True)
