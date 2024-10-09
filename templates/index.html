@@ -154,12 +154,12 @@
             <label for="BMI">BMI Category (Auto-calculated)<span style="color: red;">*</span>:</label>
             <select id="BMI" name="BMI" required>
                 <option value="">Please select</option>
-                <option value="0">0: ≤ 15.429</option>
-                <option value="1">1: 15.429 - 21.693</option>
-                <option value="2">2: 21.693 - 24.03</option>
-                <option value="3">3: 24.03 - 26.47</option>
-                <option value="4">4: 26.47 - 40.27</option>
-                <option value="5">5: > 40.27</option>
+                <option value="0">0: ≤ 15.4</option>
+                <option value="1">1: 15.4 - 21.6</option>
+                <option value="2">2: 21.6 - 24.0</option>
+                <option value="3">3: 24.0 - 26.4</option>
+                <option value="4">4: 26.4 - 40.2</option>
+                <option value="5">5: > 40.2</option>
             </select>
             <p class="hint">BMI will be automatically calculated based on the height and weight you provide.</p>
 
@@ -226,7 +226,7 @@
             <label for="SPO2">SpO2 Category (%)<span style="color: red;">*</span>:</label>
             <select id="SPO2" name="SPO2" required>
                 <option value="">Please select</option>
-                <option value="0">0: 85% - 95%</option>
+                <option value="0">0: <95%</option>
                 <option value="1">1: 95% - 97%</option>
                 <option value="2">2: 97% - 100%</option>
             </select>
@@ -235,10 +235,10 @@
             <label for="Systolic_BP">Systolic Blood Pressure Category (mmHg)<span style="color: red;">*</span>:</label>
             <select id="Systolic_BP" name="Systolic Blood Pressure" required>
                 <option value="">Please select</option>
-                <option value="0">0: 88 - 120</option>
-                <option value="1">1: 120 - 130.5</option>
-                <option value="2">2: 130.5 - 143</option>
-                <option value="3">3: > 143</option>
+                <option value="0">0: 80 - 120</option>
+                <option value="1">1: 120 - 130</option>
+                <option value="2">2: 130 - 140</option>
+                <option value="3">3: > 140</option>
             </select>
 
             <!-- Diastolic Blood Pressure Category -->
@@ -255,7 +255,7 @@
             <label for="HR">Heart Rate Category (beats/min)<span style="color: red;">*</span>:</label>
             <select id="HR" name="HR" required>
                 <option value="">Please select</option>
-                <option value="0">0: 51 - 73</option>
+                <option value="0">0: <73</option>
                 <option value="1">1: 73 - 83</option>
                 <option value="2">2: > 83</option>
             </select>
@@ -280,7 +280,7 @@
             <label for="Oxygen_Flow_Rate">Oxygen Flow Rate (L/min)<span style="color: red;">*</span>:</label>
             <input type="number" id="Oxygen_Flow_Rate" name="Oxygen Flow Rate" required min="0" step="0.1" placeholder="Enter oxygen flow rate">
 
-            <label for="Surgery_Type_3">Underwent Digestive Endoscopy<span style="color: red;">*</span>:</label>
+            <label for="Surgery_Type_3">Underwent Gastrointestinal Endoscopy<span style="color: red;">*</span>:</label>
             <select id="Surgery_Type_3" name="Surgery Type-3" required>
                 <option value="">Please select</option>
                 <option value="0">No</option>
@@ -289,6 +289,13 @@
 
             <label for="Surgery_Type_4">Underwent Endoscopic Mucosal Resection (EMR)<span style="color: red;">*</span>:</label>
             <select id="Surgery_Type_4" name="Surgery Type-4" required>
+                <option value="">Please select</option>
+                <option value="0">No</option>
+                <option value="1">Yes</option>
+            </select>
+
+            <label for="Surgery_Type_2">Underwent Colonoscopy<span style="color: red;">*</span>:</label>
+            <select id="Surgery_Type_2" name="Surgery Type-2" required>
                 <option value="">Please select</option>
                 <option value="0">No</option>
                 <option value="1">Yes</option>
@@ -307,13 +314,6 @@
 
             <label for="Drinking">Alcohol Consumption History<span style="color: red;">*</span>:</label>
             <select id="Drinking" name="Drinking" required>
-                <option value="">Please select</option>
-                <option value="0">No</option>
-                <option value="1">Yes</option>
-            </select>
-
-            <label for="BP">Currently Taking Antihypertensive Medication<span style="color: red;">*</span>:</label>
-            <select id="BP" name="BP" required>
                 <option value="">Please select</option>
                 <option value="0">No</option>
                 <option value="1">Yes</option>
