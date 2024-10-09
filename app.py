@@ -46,9 +46,7 @@ def download_model(model_url, model_path):
 def load_model():
     global model
     try:
-        base_dir = os.path.dirname(os.path.abspath(__file__))
-        model_filename = 'final_model.joblib'
-        model_path = os.path.join(base_dir, model_filename)
+        model_path = 'final_model.joblib'
         logger.info(f"Model path: {model_path}")
         
         # List all files in the current directory
