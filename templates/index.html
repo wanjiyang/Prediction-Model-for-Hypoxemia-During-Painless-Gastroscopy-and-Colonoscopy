@@ -3,205 +3,478 @@
 <head>
     <meta charset="UTF-8">
     <title>Hypoxemia Risk Prediction During Painless Gastroscopy</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Assuming styles are in a separate CSS file -->
+    <style>
+        /* Styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f7f8fa;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            background: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 32px;
+        }
+        .info {
+            text-align: center;
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        .required-note {
+            color: red;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .form-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+        .form-group {
+            flex: 1 1 500px;
+            min-width: 300px;
+            background-color: #f0f2f5;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .form-group h3 {
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            color: #3498db;
+            font-size: 24px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+        select, input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            color: #333;
+            border-radius: 4px;
+            box-sizing: border-box;
+            margin-bottom: 5px;
+            font-size: 16px;
+        }
+        .hint {
+            font-size: 12px;
+            color: #777;
+            margin-bottom: 15px;
+        }
+        select:focus, input[type="number"]:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+        button {
+            display: block;
+            width: 100%;
+            max-width: 250px;
+            margin: 50px auto 0;
+            padding: 15px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 20px;
+            font-weight: bold;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        button:hover {
+            background-color: #2980b9;
+            transform: translateY(-3px);
+        }
+        .result-section {
+            margin-top: 50px;
+            text-align: center;
+            font-size: 22px;
+            color: #27ae60;
+        }
+        .error-message {
+            color: red;
+        }
+        .suggestions-section {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #2c3e50;
+            white-space: pre-line; /* Preserve line breaks */
+        }
+        @media (max-width: 768px) {
+            .form-group {
+                flex: 1 1 100%;
+            }
+            button {
+                max-width: 100%;
+            }
+        }
+    </style>
 </head>
 <body>
+
 <div class="container">
     <h2>Hypoxemia Risk Prediction During Painless Gastroscopy</h2>
     <p class="info">Please fill in the following information to predict the likelihood of hypoxemia occurring during the procedure.</p>
-    <form id="predictionForm">
-        <div class="form-section">
-            <!-- Basic Patient Information -->
-            <div class="form-group">
-                <h3>Basic Patient Information</h3>
-                <label for="Gender">Gender*</label>
-                <select id="Gender" name="Gender" required>
-                    <option value="">Please select</option>
-                    <option value="0">Male</option>
-                    <option value="1">Female</option>
-                </select>
+    <p class="required-note">Note: Fields marked with an asterisk (*) are required.</p>
 
-                <label for="Age">Age*</label>
-                <input type="number" id="Age" name="Age" required>
+    <form id="predictionForm" class="form-section">
+        <!-- Basic Patient Information -->
+        <div class="form-group">
+            <h3>Basic Patient Information</h3>
+            <label for="Gender">Gender<span style="color: red;">*</span>:</label>
+            <select id="Gender" name="Gender" required>
+                <option value="">Please select</option>
+                <option value="0">Male</option>
+                <option value="1">Female</option>
+            </select>
 
-                <label for="Height">Height (cm)*</label>
-                <input type="number" id="Height" name="Height" required>
+            <!-- Height -->
+            <label for="Height">Height (cm)<span style="color: red;">*</span>:</label>
+            <input type="number" id="Height" name="Height" required min="100" max="250" placeholder="Enter height in cm">
 
-                <label for="Weight">Weight (kg)*</label>
-                <input type="number" id="Weight" name="Weight" required>
+            <!-- Weight -->
+            <label for="Weight">Weight (kg)<span style="color: red;">*</span>:</label>
+            <input type="number" id="Weight" name="Weight" required min="30" max="300" placeholder="Enter weight in kg">
 
-                <label for="BMI">BMI*</label>
-                <select id="BMI" name="BMI" required>
-                    <option value="">Please select</option>
-                    <option value="0">≤ 15.4</option>
-                    <option value="1">15.4 - 21.6</option>
-                    <option value="2">21.6 - 24.0</option>
-                    <option value="3">24.0 - 26.4</option>
-                    <option value="4">26.4 - 40.2</option>
-                    <option value="5">> 40.2</option>
-                </select>
+            <!-- BMI Category (Auto-calculated) -->
+            <label for="BMI">BMI Category (Auto-calculated)<span style="color: red;">*</span>:</label>
+            <select id="BMI" name="BMI" required>
+                <option value="">Please select</option>
+                <option value="0">0: ≤ 15.4</option>
+                <option value="1">1: 15.4 - 21.6</option>
+                <option value="2">2: 21.6 - 24.0</option>
+                <option value="3">3: 24.0 - 26.4</option>
+                <option value="4">4: 26.4 - 40.2</option>
+                <option value="5">5: > 40.2</option>
+            </select>
+            <p class="hint">BMI will be automatically calculated based on the height and weight you provide.</p>
 
-                <label for="NC">Neck Circumference (cm)*</label>
-                <select id="NC" name="NC" required>
-                    <option value="">Please select</option>
-                    <option value="0">≤ 34</option>
-                    <option value="1">34 - 37</option>
-                    <option value="2">37 - 41</option>
-                    <option value="3">> 41</option>
-                </select>
+            <!-- Neck Circumference Category -->
+            <label for="Neck_Circumference">Neck Circumference Category (cm)<span style="color: red;">*</span>:</label>
+            <select id="Neck_Circumference" name="Neck_Circumference" required>
+                <option value="">Please select</option>
+                <option value="0">0: ≤ 34</option>
+                <option value="1">1: 34 - 37</option>
+                <option value="2">2: 37 - 41</option>
+                <option value="3">3: > 41</option>
+            </select>
+            <p class="hint">Select the category that matches the patient's neck circumference.</p>
 
-                <label for="Years_of_Surgical_Experience">Years of Surgical Experience*</label>
-                <input type="number" id="Years_of_Surgical_Experience" name="Years of Surgical Experience" required>
-            </div>
+            <!-- Age Category -->
+            <label for="Age">Age Category<span style="color: red;">*</span>:</label>
+            <select id="Age" name="Age" required>
+                <option value="">Please select</option>
+                <option value="0">0: 0 - 42 years</option>
+                <option value="1">1: 42 - 51 years</option>
+                <option value="2">2: 51 - 58 years</option>
+                <option value="3">3: > 58 years</option>
+            </select>
 
-            <!-- Medical Evaluation -->
-            <div class="form-group">
-                <h3>Medical Evaluation</h3>
-                <label for="Cardiovascular_Disease">Cardiovascular Disease*</label>
-                <select id="Cardiovascular_Disease" name="Cardiovascular Disease" required>
-                    <option value="">Please select</option>
-                    <option value="0">No</option>
-                    <option value="1">Yes</option>
-                </select>
+            <!-- Years of Surgical Experience -->
+            <label for="Years_of_Surgical_Experience">Years of Surgical Experience<span style="color: red;">*</span>:</label>
+            <input type="number" id="Years_of_Surgical_Experience" name="Years_of_Surgical_Experience" required min="0" max="50" placeholder="Enter years of experience">
 
-                <label for="Other_Diseases">Other Diseases*</label>
-                <select id="Other_Diseases" name="Other Diseases" required>
-                    <option value="">Please select</option>
-                    <option value="0">No</option>
-                    <option value="1">Yes</option>
-                </select>
-
-                <label for="ASA">ASA Physical Status Classification*</label>
-                <select id="ASA" name="ASA" required>
-                    <option value="">Please select</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                </select>
-
-                <label for="STOP_BANG">STOP-BANG Score (0-8)*</label>
-                <select id="STOP_BANG" name="STOP-BANG" required>
-                    <option value="">Please select</option>
-                    <option value="0">0</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                </select>
-            </div>
-
-            <!-- Surgery Details -->
-            <div class="form-group">
-                <h3>Surgery Details</h3>
-                <label for="Propofol_Dosage">Propofol Dosage (mg)*</label>
-                <input type="number" id="Propofol_Dosage" name="Propofol Dosage" required>
-
-                <label for="Oxygen_Flow_Rate">Oxygen Flow Rate (L/min)*</label>
-                <input type="number" id="Oxygen_Flow_Rate" name="Oxygen Flow Rate" required>
-
-                <label for="Surgery_Type_2">Underwent Colonoscopy*</label>
-                <select id="Surgery_Type_2" name="Surgery Type-2" required>
-                    <option value="">Please select</option>
-                    <option value="0">No</option>
-                    <option value="1">Yes</option>
-                </select>
-
-                <label for="Surgery_Type_3">Underwent Gastrointestinal Endoscopy*</label>
-                <select id="Surgery_Type_3" name="Surgery Type-3" required>
-                    <option value="">Please select</option>
-                    <option value="0">No</option>
-                    <option value="1">Yes</option>
-                </select>
-
-                <label for="Surgery_Type_4">Underwent Endoscopic Mucosal Resection (EMR)*</label>
-                <select id="Surgery_Type_4" name="Surgery Type-4" required>
-                    <option value="">Please select</option>
-                    <option value="0">No</option>
-                    <option value="1">Yes</option>
-                </select>
-            </div>
-
-            <!-- Risk Factors -->
-            <div class="form-group">
-                <h3>Risk Factors</h3>
-                <label for="Smoking">Smoking History*</label>
-                <select id="Smoking" name="Smoking" required>
-                    <option value="">Please select</option>
-                    <option value="0">No</option>
-                    <option value="1">Yes</option>
-                </select>
-
-                <label for="Drinking">Alcohol Consumption History*</label>
-                <select id="Drinking" name="Drinking" required>
-                    <option value="">Please select</option>
-                    <option value="0">No</option>
-                    <option value="1">Yes</option>
-                </select>
-
-                <label for="Snoring">Snoring*</label>
-                <select id="Snoring" name="Snoring" required>
-                    <option value="">Please select</option>
-                    <option value="0">No</option>
-                    <option value="1">Yes</option>
-                </select>
-
-                <label for="Tired">Often Feel Tired*</label>
-                <select id="Tired" name="Tired" required>
-                    <option value="">Please select</option>
-                    <option value="0">No</option>
-                    <option value="1">Yes</option>
-                </select>
-
-                <label for="Observed_Apnea">Observed Apnea During Sleep*</label>
-                <select id="Observed_Apnea" name="Observed Apnea" required>
-                    <option value="">Please select</option>
-                    <option value="0">No</option>
-                    <option value="1">Yes</option>
-                </select>
-
-                <label for="Inpatient_Status">Patient Status*</label>
-                <select id="Inpatient_Status" name="Inpatient Status" required>
-                    <option value="">Please select</option>
-                    <option value="0">Outpatient</option>
-                    <option value="1">Inpatient</option>
-                </select>
-            </div>
-
-            <button type="submit">Predict Risk</button>
+            <!-- STOP-BANG Score -->
+            <label for="STOP_BANG">STOP-BANG Score (0-8)<span style="color: red;">*</span>:</label>
+            <select id="STOP_BANG" name="STOP_BANG" required>
+                <option value="">Please select</option>
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+            </select>
+            <p class="hint">Please select the patient's STOP-BANG score.</p>
         </div>
+
+        <!-- Medical Evaluation -->
+        <div class="form-group">
+            <h3>Medical Evaluation</h3>
+            <!-- Cardiovascular Disease -->
+            <label for="Cardiovascular_Disease">Cardiovascular Disease<span style="color: red;">*</span>:</label>
+            <select id="Cardiovascular_Disease" name="Cardiovascular_Disease" required>
+                <option value="">Please select</option>
+                <option value="0">No</option>
+                <option value="1">Yes</option>
+            </select>
+
+            <!-- Other Diseases -->
+            <label for="Other_Diseases">Other Diseases<span style="color: red;">*</span>:</label
+            <select id="Other_Diseases" name="Other_Diseases" required>
+                <option value="">Please select</option>
+                <option value="0">No</option>
+                <option value="1">Yes</option>
+            </select>
+
+            <!-- ASA Physical Status Classification -->
+            <label for="ASA">ASA Physical Status Classification (1-6)<span style="color: red;">*</span>:</label>
+            <select id="ASA" name="ASA" required>
+                <option value="">Please select</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+            </select>
+            <p class="hint">Select the ASA classification that matches the patient's physical status.</p>
+
+            <!-- SpO2 Category -->
+            <label for="SpO2">SpO2 Category (%)<span style="color: red;">*</span>:</label>
+            <select id="SpO2" name="SpO2" required>
+                <option value="">Please select</option>
+                <option value="0">0: <95%</option>
+                <option value="1">1: 95% - 97%</option>
+                <option value="2">2: 97% - 100%</option>
+            </select>
+
+            <!-- Systolic Blood Pressure Category -->
+            <label for="Systolic_BP">Systolic Blood Pressure Category (mmHg)<span style="color: red;">*</span>:</label>
+            <select id="Systolic_BP" name="Systolic_BP" required>
+                <option value="">Please select</option>
+                <option value="0">0: 80 - 120</option>
+                <option value="1">1: 120 - 130</option>
+                <option value="2">2: 130 - 140</option>
+                <option value="3">3: > 140</option>
+            </select>
+
+            <!-- Diastolic Blood Pressure Category -->
+            <label for="Diastolic_BP">Diastolic Blood Pressure Category (mmHg)<span style="color: red;">*</span>:</label>
+            <select id="Diastolic_BP" name="Diastolic_BP" required>
+                <option value="">Please select</option>
+                <option value="0">0: 46 - 76</option>
+                <option value="1">1: 76 - 83</option>
+                <option value="2">2: 83 - 90</option>
+                <option value="3">3: > 90</option>
+            </select>
+
+            <!-- Heart Rate Category -->
+            <label for="Heart_Rate">Heart Rate Category (beats/min)<span style="color: red;">*</span>:</label>
+            <select id="Heart_Rate" name="Heart_Rate" required>
+                <option value="">Please select</option>
+                <option value="0">0: <73</option>
+                <option value="1">1: 73 - 83</option>
+                <option value="2">2: > 83</option>
+            </select>
+
+            <!-- Respiratory Rate Category -->
+            <label for="Respiratory_Rate">Respiratory Rate Category (breaths/min)<span style="color: red;">*</span>:</label>
+            <select id="Respiratory_Rate" name="Respiratory_Rate" required>
+                <option value="">Please select</option>
+                <option value="0">0: ≤ 15</option>
+                <option value="1">1: 15 - 18</option>
+                <option value="2">2: 18 - 34</option>
+                <option value="3">3: > 34</option>
+            </select>
+        </div>
+
+        <!-- Surgery Details -->
+        <div class="form-group">
+            <h3>Surgery Details</h3>
+            <label for="Propofol_Dosage">Propofol Dosage (mg)<span style="color: red;">*</span>:</label>
+            <input type="number" id="Propofol_Dosage" name="Propofol_Dosage" required min="0" step="0.01" placeholder="Enter propofol dosage">
+
+            <label for="Oxygen_Flow_Rate">Oxygen Flow Rate (L/min)<span style="color: red;">*</span>:</label>
+            <input type="number" id="Oxygen_Flow_Rate" name="Oxygen_Flow_Rate" required min="0" step="0.1" placeholder="Enter oxygen flow rate">
+
+            <label for="Surgery_Type_3">Underwent Gastrointestinal Endoscopy<span style="color: red;">*</span>:</label>
+            <select id="Surgery_Type_3" name="Surgery_Type_3" required>
+                <option value="">Please select</option>
+                <option value="0">No</option>
+                <option value="1">Yes</option>
+            </select>
+
+            <label for="Surgery_Type_4">Underwent Endoscopic Mucosal Resection (EMR)<span style="color: red;">*</span>:</label>
+            <select id="Surgery_Type_4" name="Surgery_Type_4" required>
+                <option value="">Please select</option>
+                <option value="0">No</option>
+                <option value="1">Yes</option>
+            </select>
+
+            <label for="Surgery_Type_2">Underwent Colonoscopy<span style="color: red;">*</span>:</label>
+            <select id="Surgery_Type_2" name="Surgery_Type_2" required>
+                <option value="">Please select</option>
+                <option value="0">No</option>
+                <option value="1">Yes</option>
+            </select>
+        </div>
+
+        <!-- Risk Factors -->
+        <div class="form-group">
+            <h3>Risk Factors</h3>
+            <label for="Smoking">Smoking History<span style="color: red;">*</span>:</label>
+            <select id="Smoking" name="Smoking" required:
+                <option value="">Please select</option>
+                <option value="0">No</option>
+                <option value="1">Yes</option>
+            </select>
+
+            <label for="Drinking">Alcohol Consumption History<span style="color: red;">*</span>:</label>
+            <select id="Drinking" name="Drinking" required:
+                <option value="">Please select</option>
+                <option value="0">No</option>
+                <option value="1">Yes</option>
+            </select>
+
+            <label for="Snoring">Snoring<span style="color: red;">*</span>:</label>
+            <select id="Snoring" name="Snoring" required:
+                <option value="">Please select</option>
+                <option value="0">No</option>
+                <option value="1">Yes</option>
+            </select>
+
+            <label for="Tired">Often Feel Tired<span style="color: red;">*</span>:</label>
+            <select id="Tired" name="Tired" required:
+                <option value="">Please select</option>
+                <option value="0">No</option>
+                <option value="1">Yes</option>
+            </select>
+
+            <label for="Observed_Apnea">Observed Apnea During Sleep<span style="color: red;">*</span>:</label>
+            <select id="Observed_Apnea" name="Observed_Apnea" required:
+                <option value="">Please select</option>
+                <option value="0">No</option>
+                <option value="1">Yes</option>
+            </select>
+
+            <label for="Inpatient_Status">Patient Status<span style="color: red;">*</span>:</label>
+            <select id="Inpatient_Status" name="Inpatient_Status" required:
+                <option value="">Please select</option>
+                <option value="0">Outpatient</option>
+                <option value="1">Inpatient</option>
+            </select>
+        </div>
+
+        <button type="submit">Predict Risk</button>
     </form>
 
     <div class="result-section" id="resultSection"></div>
+    <!-- Suggestions Section -->
     <div class="suggestions-section" id="suggestionsSection"></div>
 </div>
 
 <script>
-    // Event listener for the form submission
+    // Generate STOP-BANG options
+    window.onload = function() {
+        const stopBangSelect = document.getElementById('STOP_BANG');
+        for (let i = 0; i <= 8; i++) {
+            const option = document.createElement('option');
+            option.value = i;
+            option.text = i;
+            stopBangSelect.add(option);
+        }
+
+        // Generate ASA options
+        const asaSelect = document.getElementById('ASA');
+        for (let i = 1; i <= 6; i++) {
+            const option = document.createElement('option');
+            option.value = i;
+            option.text = i;
+            asaSelect.add(option);
+        }
+    };
+
+    // Calculate BMI and auto-select BMI category
+    function calculateBMI() {
+        const heightInput = document.getElementById('Height');
+        const weightInput = document.getElementById('Weight');
+        const bmiSelect = document.getElementById('BMI');
+
+        const height = parseFloat(heightInput.value);
+        const weight = parseFloat(weightInput.value);
+
+        if (height > 0 && weight > 0) {
+            const heightInMeters = height / 100;
+            const bmi = weight / (heightInMeters * heightInMeters);
+
+            // Select the appropriate BMI category based on the BMI value
+            if (bmi <= 15.429) {
+                bmiSelect.value = "0";
+            } else if (bmi > 15.429 && bmi <= 21.693) {
+                bmiSelect.value = "1";
+            } else if (bmi > 21.693 && bmi <= 24.03) {
+                bmiSelect.value = "2";
+            } else if (bmi > 24.03 && bmi <= 26.47) {
+                bmiSelect.value = "3";
+            } else if (bmi > 26.47 && bmi <= 40.27) {
+                bmiSelect.value = "4";
+            } else if (bmi > 40.27) {
+                bmiSelect.value = "5";
+            } else {
+                bmiSelect.value = "";
+            }
+        } else {
+            bmiSelect.value = "";
+        }
+    }
+
+    // Listen for changes in height and weight inputs
+    document.getElementById('Height').addEventListener('input', calculateBMI);
+    document.getElementById('Weight').addEventListener('input', calculateBMI);
+
+    // Handle form submission
     document.getElementById('predictionForm').addEventListener('submit', function(event) {
         event.preventDefault();
-        const formData = new FormData(this);
-        const jsonData = {};
-        formData.forEach((value, key) => { jsonData[key] = value; });
 
+        // Check if BMI category has been auto-selected
+        if (document.getElementById('BMI').value === "") {
+            alert("Please ensure that height and weight are entered correctly to auto-calculate the BMI category.");
+            return;
+        }
+
+        // Collect form data
+        const formData = new FormData(this);
+
+        // Convert form data to JSON object
+        const jsonData = {};
+        formData.forEach((value, key) => {
+            jsonData[key] = value;
+        });
+
+        // Send data to the server
         fetch('/predict', {
             method: 'POST',
-            headers: {'Content-Type': 'application/json'},
+            headers: {
+                'Content-Type': 'application/json'
+            },
             body: JSON.stringify(jsonData)
         })
         .then(response => response.json())
         .then(data => {
-            document.getElementById('resultSection').textContent = data.prediction || 'Error: ' + data.error;
-            document.getElementById('suggestionsSection').textContent = data.suggestions || '';
+            const resultSection = document.getElementById('resultSection');
+            const suggestionsSection = document.getElementById('suggestionsSection');
+
+            if (data.error) {
+                resultSection.innerHTML = `<span class="error-message">${data.error}</span>`;
+                suggestionsSection.textContent = '';
+            } else {
+                resultSection.textContent = data.message;
+                suggestionsSection.textContent = data.suggestions;
+            }
         })
         .catch(error => {
-            document.getElementById('resultSection').textContent = 'Network or server error';
+            document.getElementById('resultSection').innerHTML = '<span class="error-message">A network or server error occurred.</span>';
             document.getElementById('suggestionsSection').textContent = '';
         });
     });
