@@ -195,15 +195,7 @@
             <label for="STOP_BANG">STOP-BANG Score (0-8)<span style="color: red;">*</span>:</label>
             <select id="STOP_BANG" name="STOP_BANG" required>
                 <option value="">Please select</option>
-                <option value="">0</option>
-                <option value="">1</option>
-                <option value="">2</option>
-                <option value="">3</option>
-                <option value="">4</option>
-                <option value="">5</option>
-                <option value="">6</option>
-                <option value="">7</option>
-                <option value="">8</option>
+                <!-- Options will be dynamically generated -->
             </select>
             <p class="hint">Please select the patient's STOP-BANG score.</p>
         </div>
@@ -231,12 +223,7 @@
             <label for="ASA">ASA Physical Status Classification (1-6)<span style="color: red;">*</span>:</label>
             <select id="ASA" name="ASA" required>
                 <option value="">Please select</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
+                <!-- Options will be dynamically generated -->
             </select>
             <p class="hint">Select the ASA classification that matches the patient's physical status.</p>
 
@@ -293,11 +280,10 @@
         <div class="form-group">
             <h3>Surgery Details</h3>
             <label for="Propofol_Dosage">Propofol Dosage (mg)<span style="color: red;">*</span>:</label>
-            <input type="number" id="Propofol_Dosage" name="Propofol Dosage" required min="0" step="0.01" placeholder="Enter propofol dosage">
+            <input type="number" id="Propofol_Dosage" name="Propofol_Dosage" required min="0" step="0.01" placeholder="Enter propofol dosage">
 
             <label for="Oxygen_Flow_Rate">Oxygen Flow Rate (L/min)<span style="color: red;">*</span>:</label>
-            <input type="number" id="Oxygen_Flow_Rate" name="Oxygen Flow Rate" required min="0" step="0.1" placeholder="Enter oxygen flow rate">
-
+            <input type="number" id="Oxygen_Flow_Rate" name="Oxygen_Flow_Rate" required min="0" step="0.1" placeholder="Enter oxygen flow rate">
 
             <label for="Surgery_Type_3">Underwent Gastrointestinal Endoscopy<span style="color: red;">*</span>:</label>
             <select id="Surgery_Type_3" name="Surgery_Type_3" required>
@@ -325,42 +311,42 @@
         <div class="form-group">
             <h3>Risk Factors</h3>
             <label for="Smoking">Smoking History<span style="color: red;">*</span>:</label>
-            <select id="Smoking" name="Smoking" required:
+            <select id="Smoking" name="Smoking" required>
                 <option value="">Please select</option>
                 <option value="0">No</option>
                 <option value="1">Yes</option>
             </select>
 
             <label for="Drinking">Alcohol Consumption History<span style="color: red;">*</span>:</label>
-            <select id="Drinking" name="Drinking" required:
+            <select id="Drinking" name="Drinking" required>
                 <option value="">Please select</option>
                 <option value="0">No</option>
                 <option value="1">Yes</option>
             </select>
 
             <label for="Snoring">Snoring<span style="color: red;">*</span>:</label>
-            <select id="Snoring" name="Snoring" required:
+            <select id="Snoring" name="Snoring" required>
                 <option value="">Please select</option>
                 <option value="0">No</option>
                 <option value="1">Yes</option>
             </select>
 
             <label for="Tired">Often Feel Tired<span style="color: red;">*</span>:</label>
-            <select id="Tired" name="Tired" required:
+            <select id="Tired" name="Tired" required>
                 <option value="">Please select</option>
                 <option value="0">No</option>
                 <option value="1">Yes</option>
             </select>
 
             <label for="Observed_Apnea">Observed Apnea During Sleep<span style="color: red;">*</span>:</label>
-            <select id="Observed_Apnea" name="Observed_Apnea" required:
+            <select id="Observed_Apnea" name="Observed_Apnea" required>
                 <option value="">Please select</option>
                 <option value="0">No</option>
                 <option value="1">Yes</option>
             </select>
 
             <label for="Inpatient_Status">Patient Status<span style="color: red;">*</span>:</label>
-            <select id="Inpatient_Status" name="Inpatient_Status" required:
+            <select id="Inpatient_Status" name="Inpatient_Status" required>
                 <option value="">Please select</option>
                 <option value="0">Outpatient</option>
                 <option value="1">Inpatient</option>
@@ -470,8 +456,10 @@
                 resultSection.innerHTML = `<span class="error-message">${data.error}</span>`;
                 suggestionsSection.textContent = '';
             } else {
-                resultSection.textContent = data.message;
-                suggestionsSection.textContent = data.suggestions;
+                // 假设模型返回 'prediction' 和 'suggestions'
+                // 您可以根据模型的实际输出进行调整
+                resultSection.textContent = `Prediction: ${data.prediction}`;
+                suggestionsSection.textContent = data.suggestions || '';
             }
         })
         .catch(error => {
