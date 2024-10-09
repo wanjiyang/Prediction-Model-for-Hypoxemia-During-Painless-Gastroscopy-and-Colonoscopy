@@ -4,36 +4,111 @@ import numpy as np
 import os
 import logging
 import traceback
+import hashlib
+import requests
 
 app = Flask(__name__)
 model = None
 
-# 配置日志
-logging.basicConfig(level=logging.INFO)
+# Configure logging
+logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
+
+def calculate_md5(file_path):
+    """Calculate the MD5 checksum of a file."""
+    hash_md5 = hashlib.md5()
+    with open(file_path, "rb") as f:
+        for chunk in iter(lambda: f.read(4096), b""):
+            hash_md5.update(chunk)
+    return hash_md5.hexdigest()
+
+def download_model(model_url, model_path):
+    """Download the model file from a remote URL."""
+    try:
+        logger.info(f"Attempting to download the model file from {model_url}...")
+        response = requests.get(model_url)
+        if response.status_code == 200:
+            with open(model_path, 'wb') as f:
+                f.write(response.content)
+            logger.info("Model file downloaded successfully.")
+            return True
+        else:
+            logger.error(f"Failed to download the model file. Status code: {response.status_code}")
+            return False
+    except Exception as e:
+        logger.error("An exception occurred while downloading the model file.")
+        logger.error(f"Exception type: {type(e).__name__}")
+        logger.error(f"Exception details: {e}")
+        logger.error("Full traceback:")
+        logger.error(traceback.format_exc())
+        return False
 
 def load_model():
     global model
     try:
         base_dir = os.path.dirname(os.path.abspath(__file__))
-        model_path = os.path.join(base_dir, 'final_model.joblib')
+        model_filename = 'final_model.joblib'
+        model_path = os.path.join(base_dir, model_filename)
         logger.info(f"Model path: {model_path}")
         
-        # 检查模型文件是否存在
+        # List all files in the current directory
+        files = os.listdir(base_dir)
+        logger.debug(f"Files in the current directory: {files}")
+        
+        # Check if the model file exists
         if not os.path.exists(model_path):
-            logger.error("Model file does not exist!")
-            model = None
-            return
+            logger.warning("Model file does not exist. Attempting alternative methods to load the model...")
+            # Attempt to download the model file from a remote URL
+            model_url = 'https://your-model-url.com/final_model.joblib'  # Replace with your actual model file URL
+            if download_model(model_url, model_path):
+                logger.info("Model file downloaded from the remote URL.")
+            else:
+                logger.error("Unable to obtain the model file. Model loading failed.")
+                model = None
+                return
         
-        # 打印模型文件大小
+        # Print model file size
         file_size = os.path.getsize(model_path)
-        logger.info(f"Model file size: {file_size} bytes")
+        logger.debug(f"Model file size: {file_size} bytes")
         
-        # 加载模型
-        model = load(model_path)
-        logger.info("Model loaded successfully")
+        # Calculate MD5 checksum to verify file integrity
+        md5_value = calculate_md5(model_path)
+        logger.debug(f"MD5 checksum of the model file: {md5_value}")
+        
+        # Check file permissions
+        permissions = oct(os.stat(model_path).st_mode)[-3:]
+        logger.debug(f"Model file permissions: {permissions}")
+        
+        # Attempt to load the model
+        try:
+            logger.info("Attempting to load the model...")
+            model = load(model_path)
+            logger.info("Model loaded successfully.")
+        except Exception as e:
+            logger.error("Failed to load the model. Attempting to load the model in compatibility mode.")
+            logger.error(f"Exception type: {type(e).__name__}")
+            logger.error(f"Exception details: {e}")
+            logger.error("Full traceback:")
+            logger.error(traceback.format_exc())
+            # Attempt to load the model in compatibility mode
+            try:
+                import joblib
+                logger.info("Attempting to load the model in compatibility mode...")
+                with open(model_path, 'rb') as f:
+                    model = joblib.load(f, mmap_mode='r')
+                logger.info("Model loaded successfully in compatibility mode.")
+            except Exception as e:
+                logger.error("Failed to load the model in compatibility mode.")
+                logger.error(f"Exception type: {type(e).__name__}")
+                logger.error(f"Exception details: {e}")
+                logger.error("Full traceback:")
+                logger.error(traceback.format_exc())
+                model = None
     except Exception as e:
-        logger.error("Failed to load model")
+        logger.error("An exception occurred during the model loading process.")
+        logger.error(f"Exception type: {type(e).__name__}")
+        logger.error(f"Exception details: {e}")
+        logger.error("Full traceback:")
         logger.error(traceback.format_exc())
         model = None
 
@@ -45,12 +120,14 @@ def home():
 def predict():
     try:
         if model is None:
-            return jsonify({'error': 'The model is not loaded properly, unable to make predictions'}), 500
+            logger.error("The model is not loaded properly. Unable to make predictions.")
+            return jsonify({'error': 'The model is not loaded properly. Unable to make predictions.'}), 500
 
-        # 从请求中获取JSON数据
+        # Get JSON data from the request
         data = request.get_json()
+        logger.debug(f"Received data: {data}")
 
-        # 必要字段列表
+        # List of required fields
         required_fields = [
             'Propofol Dosage', 'Oxygen Flow Rate', 'Gender', 'Age', 'BMI', 'Neck Circumference', 'STOP-BANG',
             'ASA', 'SpO2', 'Systolic Blood Pressure', 'Diastolic Blood Pressure', 'Heart Rate', 'Respiratory Rate',
@@ -59,12 +136,13 @@ def predict():
             'Cardiovascular Disease', 'Other Diseases'
         ]
 
-        # 检查是否有缺失字段
+        # Check for missing fields
         missing_fields = [field for field in required_fields if field not in data]
         if missing_fields:
+            logger.error(f"Missing required fields: {missing_fields}")
             return jsonify({'error': f'Missing required fields: {missing_fields}'}), 400
 
-        # 提取并转换输入数据
+        # Extract and convert input data
         try:
             propofol_dosage = float(data['Propofol Dosage'])
             oxygen_flow_rate = float(data['Oxygen Flow Rate'])
@@ -92,10 +170,12 @@ def predict():
             years_experience = int(data['Years of Surgical Experience'])
             cardiovascular_disease = int(data['Cardiovascular Disease'])
             other_diseases = int(data['Other Diseases'])
+            logger.debug("Input data successfully extracted and converted.")
         except ValueError as ve:
+            logger.error(f"Data type conversion error: {ve}")
             return jsonify({'error': f'Data type conversion error: {ve}'}), 400
 
-        # 组合特征为模型输入
+        # Combine features for model input
         features = np.array([[
             propofol_dosage,
             height,
@@ -124,39 +204,43 @@ def predict():
             surgery_type_4,
             surgery_type_2,
         ]])
+        logger.debug(f"Model input features: {features}")
 
-        # 使用模型进行预测
+        # Make prediction using the model
+        logger.info("Making prediction...")
         prediction = model.predict(features)
+        logger.info(f"Prediction result: {prediction}")
         result = int(prediction[0])
 
-        # 根据预测结果提供专业建议
+        # Provide professional suggestions based on the prediction result
         if result == 1:
-            message = "Based on the provided information, the patient is at a higher risk of experiencing hypoxemia during painless gastroscopy. It is recommended to take enhanced monitoring and precautionary measures."
+            message = "Based on the provided information, the patient is at a higher risk of experiencing hypoxemia during painless gastroscopy. Enhanced monitoring and preventive measures are recommended."
             suggestions = (
                 "Professional Recommendations:\n"
-                "- Ensure continuous and comprehensive oxygen saturation monitoring.\n"
+                "- Ensure continuous and comprehensive SpO2 monitoring.\n"
                 "- Prepare emergency oxygen therapy equipment and medications.\n"
-                "- Consider adjusting sedation dosage and techniques.\n"
+                "- Consider adjusting the dosage and administration method of sedatives.\n"
                 "- Collaborate closely with anesthesiology and respiratory specialists.\n"
-                "- Post-procedure, monitor the patient closely for any delayed hypoxemia events."
+                "- Post-procedure, closely monitor the patient to prevent delayed hypoxemia events."
             )
         else:
-            message = "The patient has a lower risk of hypoxemia during painless gastroscopy. Standard monitoring protocols are recommended."
+            message = "The patient is at a lower risk of experiencing hypoxemia during painless gastroscopy. Standard monitoring protocols are recommended."
             suggestions = (
                 "Professional Recommendations:\n"
                 "- Continue with standard perioperative monitoring.\n"
                 "- Ensure patient comfort and safety during the procedure.\n"
-                "- Educate the patient on signs of hypoxemia and when to seek medical attention."
+                "- Educate the patient to recognize symptoms of hypoxemia and seek medical attention if necessary."
             )
 
         return jsonify({'prediction': result, 'message': message, 'suggestions': suggestions})
     except Exception as e:
-        logger.error("An error occurred during prediction")
+        logger.error("An error occurred during the prediction process.")
+        logger.error(f"Exception type: {type(e).__name__}")
+        logger.error(f"Exception details: {e}")
+        logger.error("Full traceback:")
         logger.error(traceback.format_exc())
-        # 返回服务器内部错误信息
-        return jsonify({'error': str(e)}), 500
+        return jsonify({'error': 'Internal server error.'}), 500
 
 if __name__ == '__main__':
-    load_model()  # 在应用启动时加载模型
-    # 注意：在生产环境中，不应使用 debug=True
+    load_model()  # Load the model when the application starts
     app.run(host='0.0.0.0', port=5000)
