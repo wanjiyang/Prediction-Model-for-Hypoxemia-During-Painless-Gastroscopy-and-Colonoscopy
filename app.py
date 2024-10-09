@@ -108,7 +108,7 @@ def load_model():
         else:
             logger.error("模型文件不存在")
             # 如果模型文件不存在，尝试从远程下载
-            model_url = 'https://your-model-url.com/final_model.joblib'  # 请替换为您的模型文件下载链接
+            model_url = 'https://github.com/wanjiyang/Prediction-Model-for-Hypoxemia-During-Painless-Gastroscopy-and-Colonoscopy/blob/main/final_model.joblib'  # 请替换为您的模型文件下载链接
             if download_model(model_url, model_path):
                 logger.info("模型文件已从远程下载，重新尝试加载模型...")
                 load_model()  # 递归调用以加载模型
