@@ -8,6 +8,7 @@ import traceback
 app = Flask(__name__)
 model = None
 
+# 配置日志
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -55,7 +56,7 @@ def predict():
             'ASA', 'SPO2', 'Systolic Blood Pressure', 'Diastolic Blood Pressure', 'HR', 'RR',
             'Surgery Type-3', 'Surgery Type-4', 'Smoking', 'Drinking', 'Snoring', 'Tired',
             'Observed', 'Inpatient', 'Height', 'Years of Surgical Experience',
-            'Cardiovascular Disease-1', 'Other Disease-1.0','Surgery Type-2'
+            'Cardiovascular Disease-1', 'Other Disease-1.0', 'Surgery Type-2'
         ]
 
         # 检查是否有缺失字段
