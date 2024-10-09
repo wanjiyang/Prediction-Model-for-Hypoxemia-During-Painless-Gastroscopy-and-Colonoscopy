@@ -108,6 +108,9 @@
             font-size: 22px;
             color: #27ae60;
         }
+        .error-message {
+            color: red;
+        }
         .suggestions-section {
             margin-top: 20px;
             font-size: 18px;
@@ -164,8 +167,8 @@
             <p class="hint">BMI will be automatically calculated based on the height and weight you provide.</p>
 
             <!-- Neck Circumference Category -->
-            <label for="NC">Neck Circumference Category (cm)<span style="color: red;">*</span>:</label>
-            <select id="NC" name="NC" required>
+            <label for="Neck_Circumference">Neck Circumference Category (cm)<span style="color: red;">*</span>:</label>
+            <select id="Neck_Circumference" name="Neck Circumference" required>
                 <option value="">Please select</option>
                 <option value="0">0: ≤ 34</option>
                 <option value="1">1: 34 - 37</option>
@@ -185,8 +188,8 @@
             </select>
 
             <!-- Years of Surgical Experience -->
-            <label for="Years_Experience">Years of Surgical Experience<span style="color: red;">*</span>:</label>
-            <input type="number" id="Years_Experience" name="Years of Surgical Experience" required min="0" max="50" placeholder="Enter years of experience">
+            <label for="Years_of_Surgical_Experience">Years of Surgical Experience<span style="color: red;">*</span>:</label>
+            <input type="number" id="Years_of_Surgical_Experience" name="Years of Surgical Experience" required min="0" max="50" placeholder="Enter years of experience">
 
             <!-- STOP-BANG Score -->
             <label for="STOP_BANG">STOP-BANG Score (0-8)<span style="color: red;">*</span>:</label>
@@ -201,15 +204,15 @@
             <h3>Medical Evaluation</h3>
             <!-- Cardiovascular Disease -->
             <label for="Cardiovascular_Disease">Cardiovascular Disease<span style="color: red;">*</span>:</label>
-            <select id="Cardiovascular_Disease" name="Cardiovascular Disease-1" required>
+            <select id="Cardiovascular_Disease" name="Cardiovascular Disease" required>
                 <option value="">Please select</option>
                 <option value="0">No</option>
                 <option value="1">Yes</option>
             </select>
 
             <!-- Other Diseases -->
-            <label for="Other_Disease">Other Diseases<span style="color: red;">*</span>:</label>
-            <select id="Other_Disease" name="Other Disease-1.0" required>
+            <label for="Other_Diseases">Other Diseases<span style="color: red;">*</span>:</label>
+            <select id="Other_Diseases" name="Other Diseases" required>
                 <option value="">Please select</option>
                 <option value="0">No</option>
                 <option value="1">Yes</option>
@@ -223,8 +226,8 @@
             <p class="hint">Select the ASA classification that matches the patient's physical status.</p>
 
             <!-- SpO2 Category -->
-            <label for="SPO2">SpO2 Category (%)<span style="color: red;">*</span>:</label>
-            <select id="SPO2" name="SPO2" required>
+            <label for="SpO2">SpO2 Category (%)<span style="color: red;">*</span>:</label>
+            <select id="SpO2" name="SpO2" required>
                 <option value="">Please select</option>
                 <option value="0">0: <95%</option>
                 <option value="1">1: 95% - 97%</option>
@@ -252,8 +255,8 @@
             </select>
 
             <!-- Heart Rate Category -->
-            <label for="HR">Heart Rate Category (beats/min)<span style="color: red;">*</span>:</label>
-            <select id="HR" name="HR" required>
+            <label for="Heart_Rate">Heart Rate Category (beats/min)<span style="color: red;">*</span>:</label>
+            <select id="Heart_Rate" name="Heart Rate" required>
                 <option value="">Please select</option>
                 <option value="0">0: <73</option>
                 <option value="1">1: 73 - 83</option>
@@ -261,8 +264,8 @@
             </select>
 
             <!-- Respiratory Rate Category -->
-            <label for="RR">Respiratory Rate Category (breaths/min)<span style="color: red;">*</span>:</label>
-            <select id="RR" name="RR" required>
+            <label for="Respiratory_Rate">Respiratory Rate Category (breaths/min)<span style="color: red;">*</span>:</label>
+            <select id="Respiratory_Rate" name="Respiratory Rate" required>
                 <option value="">Please select</option>
                 <option value="0">0: ≤ 15</option>
                 <option value="1">1: 15 - 18</option>
@@ -333,15 +336,15 @@
                 <option value="1">Yes</option>
             </select>
 
-            <label for="Observed">Observed Apnea During Sleep<span style="color: red;">*</span>:</label>
-            <select id="Observed" name="Observed" required>
+            <label for="Observed_Apnea">Observed Apnea During Sleep<span style="color: red;">*</span>:</label>
+            <select id="Observed_Apnea" name="Observed Apnea" required>
                 <option value="">Please select</option>
                 <option value="0">No</option>
                 <option value="1">Yes</option>
             </select>
 
-            <label for="Inpatient">Patient Status<span style="color: red;">*</span>:</label>
-            <select id="Inpatient" name="Inpatient" required>
+            <label for="Inpatient_Status">Patient Status<span style="color: red;">*</span>:</label>
+            <select id="Inpatient_Status" name="Inpatient Status" required>
                 <option value="">Please select</option>
                 <option value="0">Outpatient</option>
                 <option value="1">Inpatient</option>
@@ -444,28 +447,19 @@
         })
         .then(response => response.json())
         .then(data => {
+            const resultSection = document.getElementById('resultSection');
+            const suggestionsSection = document.getElementById('suggestionsSection');
+
             if (data.error) {
-                document.getElementById('resultSection').innerHTML = `<span style="color: red;">${data.error}</span>`;
-                document.getElementById('suggestionsSection').textContent = '';
+                resultSection.innerHTML = `<span class="error-message">${data.error}</span>`;
+                suggestionsSection.textContent = '';
             } else {
-                const result = data.prediction[0];
-                let message = '';
-                let suggestions = '';
-
-                if (result == 1) {
-                    message = "Based on the provided information, the patient has a higher risk of hypoxemia. Please take necessary precautions.";
-                    suggestions = "Recommendations:\n- Ensure continuous oxygen monitoring.\n- Prepare emergency oxygen therapy.\n- Consider adjusting sedation dosage.";
-                } else {
-                    message = "The patient has a lower risk of hypoxemia, but continuous monitoring is still recommended.";
-                    suggestions = "Recommendations:\n- Continue standard monitoring protocols.\n- Maintain patient comfort.";
-                }
-
-                document.getElementById('resultSection').textContent = message;
-                document.getElementById('suggestionsSection').textContent = suggestions;
+                resultSection.textContent = data.message;
+                suggestionsSection.textContent = data.suggestions;
             }
         })
         .catch(error => {
-            document.getElementById('resultSection').textContent = 'A network or server error occurred.';
+            document.getElementById('resultSection').innerHTML = '<span class="error-message">A network or server error occurred.</span>';
             document.getElementById('suggestionsSection').textContent = '';
         });
     });
