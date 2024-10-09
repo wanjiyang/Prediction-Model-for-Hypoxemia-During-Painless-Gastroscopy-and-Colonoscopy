@@ -4,7 +4,7 @@ import numpy as np
 import logging
 
 app = Flask(__name__)
-model = None  # 全局变量存储模型
+model =load('final_model.joblib')  # 全局变量存储模型
 
 # 配置日志
 logging.basicConfig(level=logging.DEBUG)
