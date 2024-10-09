@@ -53,9 +53,9 @@ def predict():
         required_fields = [
             'Propofol Dosage', 'Oxygen Flow Rate', 'Gender', 'Age', 'BMI', 'NC', 'STOP-BANG',
             'ASA', 'SPO2', 'Systolic Blood Pressure', 'Diastolic Blood Pressure', 'HR', 'RR',
-            'Surgery Type-3', 'Surgery Type-4', 'Smoking', 'Drinking', 'BP', 'Snoring', 'Tired',
+            'Surgery Type-3', 'Surgery Type-4', 'Smoking', 'Drinking', 'Snoring', 'Tired',
             'Observed', 'Inpatient', 'Height', 'Years of Surgical Experience',
-            'Cardiovascular Disease-1', 'Other Disease-1.0'
+            'Cardiovascular Disease-1', 'Other Disease-1.0','Surgery Type-2'
         ]
 
         # 检查是否有缺失字段
@@ -66,7 +66,7 @@ def predict():
         # 提取并转换输入数据
         try:
             propofol_dosage = float(data['Propofol Dosage'])
-            oxygen_flow_rate = float(data['Oxygen Flow Rate'])
+            oxygen_flow_rate = int(data['Oxygen Flow Rate'])
             gender = int(data['Gender'])
             age = int(data['Age'])
             bmi = float(data['BMI'])
@@ -80,9 +80,9 @@ def predict():
             rr = float(data['RR'])
             surgery_type_3 = int(data['Surgery Type-3'])
             surgery_type_4 = int(data['Surgery Type-4'])
+            surgery_type_2 = int(data['Surgery Type-2'])
             smoking = int(data['Smoking'])
             drinking = int(data['Drinking'])
-            bp = int(data['BP'])
             snoring = int(data['Snoring'])
             tired = int(data['Tired'])
             observed = int(data['Observed'])
@@ -113,7 +113,6 @@ def predict():
             snoring,
             surgery_type_3,
             drinking,
-            bp,
             smoking,
             inpatient,
             observed,
@@ -122,7 +121,8 @@ def predict():
             tired,
             other_disease,
             oxygen_flow_rate,
-            surgery_type_4
+            surgery_type_4,
+            surgery_type_2,
         ]])
 
         # 使用模型进行预测
