@@ -167,8 +167,8 @@
             <p class="hint">BMI will be automatically calculated based on the height and weight you provide.</p>
 
             <!-- Neck Circumference Category -->
-            <label for="Neck_Circumference">Neck Circumference Category (cm)<span style="color: red;">*</span>:</label>
-            <select id="Neck_Circumference" name="Neck_Circumference" required>
+            <label for="NC">Neck Circumference Category (cm)<span style="color: red;">*</span>:</label>
+            <select id="NC" name="NC" required>
                 <option value="">Please select</option>
                 <option value="0">0: ≤ 34</option>
                 <option value="1">1: 34 - 37</option>
@@ -188,12 +188,12 @@
             </select>
 
             <!-- Years of Surgical Experience -->
-            <label for="Years_of_Surgical_Experience">Years of Surgical Experience<span style="color: red;">*</span>:</label>
-            <input type="number" id="Years_of_Surgical_Experience" name="Years_of_Surgical_Experience" required min="0" max="50" placeholder="Enter years of experience">
+            <label for="Years of Surgical Experience">Years of Surgical Experience<span style="color: red;">*</span>:</label>
+            <input type="number" id="Years_of_Surgical_Experience" name="Years of Surgical Experience" required min="0" max="50" placeholder="Enter years of experience">
 
             <!-- STOP-BANG Score -->
-            <label for="STOP_BANG">STOP-BANG Score (0-8)<span style="color: red;">*</span>:</label>
-            <select id="STOP_BANG" name="STOP_BANG" required>
+            <label for="STOP-BANG">STOP-BANG Score (0-8)<span style="color: red;">*</span>:</label>
+            <select id="STOP-BANG" name="STOP-BANG" required>
                 <option value="">Please select</option>
                 <!-- Options will be dynamically generated -->
             </select>
@@ -204,16 +204,16 @@
         <div class="form-group">
             <h3>Medical Evaluation</h3>
             <!-- Cardiovascular Disease -->
-            <label for="Cardiovascular_Disease">Cardiovascular Disease<span style="color: red;">*</span>:</label>
-            <select id="Cardiovascular_Disease" name="Cardiovascular_Disease" required>
+            <label for="Cardiovascular Disease-1">Cardiovascular Disease<span style="color: red;">*</span>:</label>
+            <select id="Cardiovascular Disease-1" name="Cardiovascular Disease-1" required>
                 <option value="">Please select</option>
                 <option value="0">No</option>
                 <option value="1">Yes</option>
             </select>
 
             <!-- Other Diseases -->
-            <label for="Other_Diseases">Other Diseases<span style="color: red;">*</span>:</label>
-            <select id="Other_Diseases" name="Other_Diseases" required>
+            <label for="Other Disease-1.0">Other Diseases<span style="color: red;">*</span>:</label>
+            <select id="Other Disease-1.0" name="Other Disease-1.0" required>
                 <option value="">Please select</option>
                 <option value="0">No</option>
                 <option value="1">Yes</option>
@@ -228,8 +228,8 @@
             <p class="hint">Select the ASA classification that matches the patient's physical status.</p>
 
             <!-- SpO2 Category -->
-            <label for="SpO2">SpO2 Category (%)<span style="color: red;">*</span>:</label>
-            <select id="SpO2" name="SpO2" required>
+            <label for="SPO2">SpO2 Category (%)<span style="color: red;">*</span>:</label>
+            <select id="SPO2" name="SPO2" required>
                 <option value="">Please select</option>
                 <option value="0">0: <95%</option>
                 <option value="1">1: 95% - 97%</option>
@@ -237,8 +237,8 @@
             </select>
 
             <!-- Systolic Blood Pressure Category -->
-            <label for="Systolic_BP">Systolic Blood Pressure Category (mmHg)<span style="color: red;">*</span>:</label>
-            <select id="Systolic_BP" name="Systolic_BP" required>
+            <label for="Systolic Blood Pressure">Systolic Blood Pressure Category (mmHg)<span style="color: red;">*</span>:</label>
+            <select id="Systolic Blood Pressure" name="Systolic Blood Pressure" required>
                 <option value="">Please select</option>
                 <option value="0">0: 80 - 120</option>
                 <option value="1">1: 120 - 130</option>
@@ -247,8 +247,8 @@
             </select>
 
             <!-- Diastolic Blood Pressure Category -->
-            <label for="Diastolic_BP">Diastolic Blood Pressure Category (mmHg)<span style="color: red;">*</span>:</label>
-            <select id="Diastolic_BP" name="Diastolic_BP" required>
+            <label for="Diastolic Blood Pressure">Diastolic Blood Pressure Category (mmHg)<span style="color: red;">*</span>:</label>
+            <select id="Diastolic Blood Pressure" name="Diastolic Blood Pressure" required>
                 <option value="">Please select</option>
                 <option value="0">0: 46 - 76</option>
                 <option value="1">1: 76 - 83</option>
@@ -257,8 +257,8 @@
             </select>
 
             <!-- Heart Rate Category -->
-            <label for="Heart_Rate">Heart Rate Category (beats/min)<span style="color: red;">*</span>:</label>
-            <select id="Heart_Rate" name="Heart_Rate" required>
+            <label for="HR">Heart Rate Category (beats/min)<span style="color: red;">*</span>:</label>
+            <select id="HR" name="HR" required>
                 <option value="">Please select</option>
                 <option value="0">0: <73</option>
                 <option value="1">1: 73 - 83</option>
@@ -266,8 +266,8 @@
             </select>
 
             <!-- Respiratory Rate Category -->
-            <label for="Respiratory_Rate">Respiratory Rate Category (breaths/min)<span style="color: red;">*</span>:</label>
-            <select id="Respiratory_Rate" name="Respiratory_Rate" required>
+            <label for="RR">Respiratory Rate Category (breaths/min)<span style="color: red;">*</span>:</label>
+            <select id="RR" name="RR" required>
                 <option value="">Please select</option>
                 <option value="0">0: ≤ 15</option>
                 <option value="1">1: 15 - 18</option>
@@ -279,28 +279,28 @@
         <!-- Surgery Details -->
         <div class="form-group">
             <h3>Surgery Details</h3>
-            <label for="Propofol_Dosage">Propofol Dosage (mg)<span style="color: red;">*</span>:</label>
-            <input type="number" id="Propofol_Dosage" name="Propofol_Dosage" required min="0" step="0.01" placeholder="Enter propofol dosage">
+            <label for="Propofol Dosage">Propofol Dosage (mg)<span style="color: red;">*</span>:</label>
+            <input type="number" id="Propofol Dosage" name="Propofol Dosage" required min="0" step="0.01" placeholder="Enter propofol dosage">
 
-            <label for="Oxygen_Flow_Rate">Oxygen Flow Rate (L/min)<span style="color: red;">*</span>:</label>
-            <input type="number" id="Oxygen_Flow_Rate" name="Oxygen_Flow_Rate" required min="0" step="0.1" placeholder="Enter oxygen flow rate">
+            <label for="Oxygen Flow Rate">Oxygen Flow Rate (L/min)<span style="color: red;">*</span>:</label>
+            <input type="number" id="Oxygen Flow Rate" name="Oxygen Flow Rate" required min="0" step="0.1" placeholder="Enter oxygen flow rate">
 
-            <label for="Surgery_Type_3">Underwent Gastrointestinal Endoscopy<span style="color: red;">*</span>:</label>
-            <select id="Surgery_Type_3" name="Surgery_Type_3" required>
+            <label for="Surgery Type-3">Underwent Gastrointestinal Endoscopy<span style="color: red;">*</span>:</label>
+            <select id="Surgery Type-3" name="Surgery Type-3" required>
                 <option value="">Please select</option>
                 <option value="0">No</option>
                 <option value="1">Yes</option>
             </select>
 
-            <label for="Surgery_Type_4">Underwent Endoscopic Mucosal Resection (EMR)<span style="color: red;">*</span>:</label>
-            <select id="Surgery_Type_4" name="Surgery_Type_4" required>
+            <label for="Surgery Type-4">Underwent Endoscopic Mucosal Resection (EMR)<span style="color: red;">*</span>:</label>
+            <select id="Surgery Type-4" name="Surgery Type-4" required>
                 <option value="">Please select</option>
                 <option value="0">No</option>
                 <option value="1">Yes</option>
             </select>
 
-            <label for="Surgery_Type_2">Underwent Colonoscopy<span style="color: red;">*</span>:</label>
-            <select id="Surgery_Type_2" name="Surgery_Type_2" required>
+            <label for="Surgery Type-2">Underwent Colonoscopy<span style="color: red;">*</span>:</label>
+            <select id="Surgery Type-2" name="Surgery Type-2" required>
                 <option value="">Please select</option>
                 <option value="0">No</option>
                 <option value="1">Yes</option>
@@ -338,15 +338,15 @@
                 <option value="1">Yes</option>
             </select>
 
-            <label for="Observed_Apnea">Observed Apnea During Sleep<span style="color: red;">*</span>:</label>
-            <select id="Observed_Apnea" name="Observed_Apnea" required>
+            <label for="Observed">Observed Apnea During Sleep<span style="color: red;">*</span>:</label>
+            <select id="Observed" name="Observed" required>
                 <option value="">Please select</option>
                 <option value="0">No</option>
                 <option value="1">Yes</option>
             </select>
 
-            <label for="Inpatient_Status">Patient Status<span style="color: red;">*</span>:</label>
-            <select id="Inpatient_Status" name="Inpatient_Status" required>
+            <label for="Inpatient">Patient Status<span style="color: red;">*</span>:</label>
+            <select id="Inpatient" name="Inpatient" required>
                 <option value="">Please select</option>
                 <option value="0">Outpatient</option>
                 <option value="1">Inpatient</option>
@@ -364,7 +364,7 @@
 <script>
     // Generate STOP-BANG options
     window.onload = function() {
-        const stopBangSelect = document.getElementById('STOP_BANG');
+        const stopBangSelect = document.getElementById('STOP-BANG');
         for (let i = 0; i <= 8; i++) {
             const option = document.createElement('option');
             option.value = i;
