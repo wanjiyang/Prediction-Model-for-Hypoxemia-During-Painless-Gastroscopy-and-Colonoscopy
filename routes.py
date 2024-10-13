@@ -118,10 +118,21 @@ def predict():
         # 假设模型返回的是类别编号，如 0 或 1
         if prediction[0] == 1:
             prediction_message = "High risk of hypoxemia."
-            suggestions = "Consider additional monitoring and preventive measures."
+            suggestions = (
+            "1. **Pre-oxygenation**: Before anesthesia induction, ensure sufficient oxygenation to provide the patient with adequate oxygen reserves. If possible, directly use advanced ventilation equipment, such as nasal high-flow oxygen therapy.\n"
+            "2. **Adjust Anesthesia Plan**: Choose anesthetic drugs that have minimal respiratory suppression, control the dosage, and carefully select the anesthesia plan.\n"
+            "3. **Enhance Monitoring**: Utilize continuous pulse oximetry monitoring while simultaneously monitoring blood pressure, heart rate, and respiration. Ensure that trained and experienced anesthesiologists closely supervise the patient.\n"
+            "4. **Prepare for Emergencies**: Equip necessary respiratory support devices, such as airway management equipment, ventilators, and simple resuscitation bags."
+        )
         else:
             prediction_message = "Low risk of hypoxemia."
-            suggestions = "Standard monitoring is sufficient."
+            suggestions = (
+            "1. **Pre-oxygenation**: Perform routine oxygenation before induction.\n"
+            "2. **Anesthesia Plan**: Execute the standard anesthesia plan.\n"
+            "3. **Standard Monitoring**: Continue real-time monitoring of blood oxygen, blood pressure, heart rate, etc.\n"
+            "4. **Stay Vigilant**: Experienced anesthesiologists should monitor the patient's respiration and blood oxygen levels.\n"
+            "5. **Equipment Preparation**: Prepare standard equipment."
+        )
 
         return jsonify({
             'prediction': prediction_message,
